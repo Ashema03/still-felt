@@ -12,6 +12,7 @@ KIRAN = pathlib.Path.home() / 'Desktop/Kirans-Forschung/website-texte'
 SEITEN = [  # (Quelle, Ausgabe, Name, in Hauptnavigation?)
     (KIRAN / 'startseite.md', 'index.html', 'Home', True),
     (KIRAN / 'research.md', 'research.html', 'Research', True),
+    (KIRAN / 'the-question.md', 'the-question.html', 'The Question', True),
     (HIER / '_quellen/legal.md', 'legal.html', 'Legal notice', False),
     (HIER / '_quellen/privacy.md', 'privacy.html', 'Privacy', False),
 ]
