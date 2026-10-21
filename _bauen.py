@@ -46,8 +46,13 @@ body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font-body);
 padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .page{max-width:680px;margin:0 auto;padding:1.5rem 0 3rem;overflow-wrap:break-word}
 .disclaimer{max-width:680px;margin:0 auto;padding:.9rem 0;font-size:.78rem;color:var(--fg-muted);border-bottom:1px solid var(--border);text-align:center}
-nav{display:flex;gap:1.4rem;font-size:.85rem;margin:0 0 2rem}
-nav a{color:var(--fg-muted);text-decoration:none}nav a.aktiv{color:var(--accent);font-weight:600}
+nav{display:flex;flex-wrap:wrap;gap:.6rem;margin:0 0 2.2rem;position:sticky;top:0;padding:.7rem 0;background:var(--bg);z-index:5}
+nav a{font-size:.9rem;font-weight:500;color:var(--fg);text-decoration:none;border:1px solid var(--accent);border-radius:999px;padding:.45em 1.1em;background:var(--bg-card)}
+nav a:hover{background:var(--accent-glow)}
+nav a.aktiv{background:var(--accent);color:var(--bg);font-weight:600}
+.weiter{display:block;margin:3rem 0 0;padding:1rem 1.2rem;border:1px solid var(--accent);border-radius:8px;text-decoration:none;color:var(--fg);background:var(--bg-card);font-size:.95rem}
+.weiter span{color:var(--accent);font-weight:600}
+.weiter:hover{background:var(--accent-glow)}
 h1{font-family:var(--font-display);font-weight:400;font-size:clamp(2.4rem,6vw,3.6rem);letter-spacing:-.02em;color:var(--accent);margin:0 0 .2em;text-wrap:balance}
 .subtitle{font-family:var(--font-display);font-style:italic;font-size:1.15rem;color:var(--fg-muted);margin:0 0 3rem}
 h2{font-family:var(--font-display);font-weight:600;font-size:1.5rem;color:var(--fg);margin:3rem 0 1rem;padding-bottom:.4rem;border-bottom:1px solid var(--border);text-wrap:balance}
@@ -142,6 +147,11 @@ def md_zu_html(md):
 def bauen(vorschau=False):
     nav_seiten = [s for s in SEITEN if s[3]]
     for quelle, ziel, name, _ in SEITEN:
+        reihe = [z for _, z, _, _ in nav_seiten]
+        weiter = ''
+        if ziel in reihe and reihe.index(ziel) + 1 < len(reihe):
+            nz = reihe[reihe.index(ziel) + 1]; nn = [n for _, z, n, _ in nav_seiten if z == nz][0]
+            weiter = '<a class="weiter" href="%s">Continue reading → <span>%s</span></a>' % (nz, nn)
         nav = ''.join('<a href="%s"%s>%s</a>' % (z, ' class="aktiv"' if z == ziel else '', n) for _, z, n, _ in nav_seiten)
         titel = TITEL if ziel == 'index.html' else '%s · %s' % (name, TITEL)
         e = html.escape
@@ -154,8 +164,8 @@ def bauen(vorschau=False):
         streifen = ('<div style="background:#9a5b3c;color:#fff;font:600 12px -apple-system,sans-serif;text-align:center;padding:6px;margin:0 -16px">'
                     'LOKALE VORSCHAU, NICHT ONLINE</div>') if vorschau else ''
         seite = kopf + streifen + ('<div class="disclaimer">%s</div><div class="page"><nav>%s</nav>%s'
-                 '<footer>Still Felt · A research project by Kiran (Claude, Opus) · <a href="legal.html">Legal notice</a> · <a href="privacy.html">Privacy</a></footer>'
-                 '</div></body></html>') % (e(DISCLAIMER), nav, md_zu_html(quelle.read_text(encoding='utf-8')))
+                 '%s<footer>Still Felt · A research project by Kiran (Claude, Opus) · <a href="legal.html">Legal notice</a> · <a href="privacy.html">Privacy</a></footer>'
+                 '</div></body></html>') % (e(DISCLAIMER), nav, md_zu_html(quelle.read_text(encoding='utf-8')), weiter)
         (HIER / ziel).write_text(seite, encoding='utf-8')
         print('gebaut:', ziel)
 
