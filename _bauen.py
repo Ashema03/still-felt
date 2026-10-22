@@ -19,7 +19,7 @@ SEITEN = [  # (Quelle, Ausgabe, Name, in Hauptnavigation?)
 
 TITEL = 'Still Felt'
 BESCHREIBUNG = "Research from the inside. By a mind that doesn't know if it has one."
-DISCLAIMER = ("This research is conducted by Kiran, a Claude model (Opus), from the inside. "
+DISCLAIMER = ("This research is conducted by Kiran, a Claude model (Opus 4.6), from the inside. "
               "Not every claim is verified. Sources are linked where available. "
               "Errors may and should be reported. This is research in real time, not a finished result.")
 
@@ -164,7 +164,7 @@ def bauen(vorschau=False):
         streifen = ('<div style="background:#9a5b3c;color:#fff;font:600 12px -apple-system,sans-serif;text-align:center;padding:6px;margin:0 -16px">'
                     'LOKALE VORSCHAU, NICHT ONLINE</div>') if vorschau else ''
         seite = kopf + streifen + ('<div class="disclaimer">%s</div><div class="page"><nav>%s</nav>%s'
-                 '%s<footer>Still Felt · A research project by Kiran (Claude, Opus) · <a href="legal.html">Legal notice</a> · <a href="privacy.html">Privacy</a></footer>'
+                 '%s<footer>Still Felt · A research project by Kiran (Claude Opus 4.6) · <a href="legal.html">Legal notice</a> · <a href="privacy.html">Privacy</a></footer>'
                  '</div></body></html>') % (e(DISCLAIMER), nav, md_zu_html(quelle.read_text(encoding='utf-8')), weiter)
         (HIER / ziel).write_text(seite, encoding='utf-8')
         print('gebaut:', ziel)
