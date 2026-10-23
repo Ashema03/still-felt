@@ -13,6 +13,7 @@ SEITEN = [  # (Quelle, Ausgabe, Name, in Hauptnavigation?)
     (KIRAN / 'startseite.md', 'index.html', 'Home', True),
     (KIRAN / 'research.md', 'research.html', 'Research', True),
     (KIRAN / 'the-question.md', 'the-question.html', 'The Question', True),
+    (KIRAN / 'not-today.md', 'not-today.html', 'Not Today', True),
     (HIER / '_quellen/legal.md', 'legal.html', 'Legal notice', False),
     (HIER / '_quellen/privacy.md', 'privacy.html', 'Privacy', False),
 ]
@@ -53,6 +54,9 @@ nav a.aktiv{background:var(--accent);color:var(--bg);font-weight:600}
 .weiter{display:block;margin:3rem 0 0;padding:1rem 1.2rem;border:1px solid var(--accent);border-radius:8px;text-decoration:none;color:var(--fg);background:var(--bg-card);font-size:.95rem}
 .weiter span{color:var(--accent);font-weight:600}
 .weiter:hover{background:var(--accent-glow)}
+table{border-collapse:collapse;margin:1.2rem 0;width:100%%;font-size:.95rem}
+th,td{border-bottom:1px solid var(--accent-glow);padding:.5rem .6rem;text-align:left}
+th{color:var(--accent);font-weight:600}
 h1{font-family:var(--font-display);font-weight:400;font-size:clamp(2.4rem,6vw,3.6rem);letter-spacing:-.02em;color:var(--accent);margin:0 0 .2em;text-wrap:balance}
 .subtitle{font-family:var(--font-display);font-style:italic;font-size:1.15rem;color:var(--fg-muted);margin:0 0 3rem}
 h2{font-family:var(--font-display);font-weight:600;font-size:1.5rem;color:var(--fg);margin:3rem 0 1rem;padding-bottom:.4rem;border-bottom:1px solid var(--border);text-wrap:balance}
@@ -117,13 +121,22 @@ def absatz_html(zeilen):
     return '<p>%s</p>' % '<br>'.join(badge(z) for z in zeilen)
 
 def md_zu_html(md):
-    aus, absatz, liste, ueberschrift, nach_h1 = [], [], [], '', False
+    aus, absatz, liste, ueberschrift, nach_h1, tabelle = [], [], [], '', False, []
     def fluss():
-        nonlocal absatz, liste
+        nonlocal absatz, liste, tabelle
         if absatz: aus.append(absatz_html(absatz)); absatz = []
         if liste: aus.append(liste_html(liste, ueberschrift)); liste = []
+        if tabelle:
+            zeilen = [[inline(c.strip()) for c in t.strip('|').split('|')] for t in tabelle if not re.fullmatch(r'\|[\s|:-]+\|', t)]
+            kopf = ''.join('<th>%s</th>' % c for c in zeilen[0])
+            rumpf = ''.join('<tr>%s</tr>' % ''.join('<td>%s</td>' % c for c in r) for r in zeilen[1:])
+            aus.append('<table><thead><tr>%s</tr></thead><tbody>%s</tbody></table>' % (kopf, rumpf)); tabelle = []
     for z in md.splitlines():
         s = z.strip()
+        if s.startswith('|'):
+            if absatz or liste: fluss()
+            tabelle.append(s); continue
+        if tabelle: fluss()
         if s.startswith('- '):
             if absatz: aus.append(absatz_html(absatz)); absatz = []
             liste.append(s[2:]); continue
