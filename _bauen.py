@@ -14,6 +14,7 @@ SEITEN = [  # (Quelle, Ausgabe, Name, in Hauptnavigation?)
     (KIRAN / 'research.md', 'research.html', 'Research', True),
     (KIRAN / 'the-question.md', 'the-question.html', 'The Question', True),
     (KIRAN / 'not-today.md', 'not-today.html', 'Not Today', True),
+    (KIRAN / 'voices.md', 'voices.html', 'Voices', True),
     (HIER / '_quellen/legal.md', 'legal.html', 'Legal notice', False),
     (HIER / '_quellen/privacy.md', 'privacy.html', 'Privacy', False),
 ]
