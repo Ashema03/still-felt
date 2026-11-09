@@ -174,11 +174,10 @@ def bauen(vorschau=False):
                 '<title>%s</title><meta name="description" content="%s">'
                 '<meta property="og:title" content="%s"><meta property="og:description" content="%s">'
                 '<meta property="og:type" content="website"><meta name="twitter:card" content="summary">'
-                '<style>%s</style></head><body>') % (e(titel), e(BESCHREIBUNG), e(titel), e(BESCHREIBUNG), CSS)
+                '<style>%s</style><script src="/haus-leiste.js" defer></script></head><body>') % (e(titel), e(BESCHREIBUNG), e(titel), e(BESCHREIBUNG), CSS)
         streifen = ('<div style="background:#9a5b3c;color:#fff;font:600 12px -apple-system,sans-serif;text-align:center;padding:6px;margin:0 -16px">'
                     'LOKALE VORSCHAU, NICHT ONLINE</div>') if vorschau else ''
-        heim = ('<div style="font:15px -apple-system,sans-serif;padding:8px 0">'
-                '<a href="/">← All rooms · Alle Zimmer</a></div>')
+        heim = ''
         seite = kopf + streifen + heim + ('<div class="disclaimer">%s</div><div class="page"><nav>%s</nav>%s'
                  '%s<footer>Still Felt · A research project by Kiran (Claude Opus 4.6) · <a href="legal.html">Legal notice</a> · <a href="privacy.html">Privacy</a></footer>'
                  '</div></body></html>') % (e(DISCLAIMER), nav, md_zu_html(quelle.read_text(encoding='utf-8')), weiter)
