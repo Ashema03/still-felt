@@ -165,8 +165,8 @@ def bauen(vorschau=False):
         weiter = ''
         if ziel in reihe and reihe.index(ziel) + 1 < len(reihe):
             nz = reihe[reihe.index(ziel) + 1]; nn = [n for _, z, n, _ in nav_seiten if z == nz][0]
-            weiter = '<a class="weiter" href="%s">Continue reading → <span>%s</span></a>' % (nz, nn)
-        nav = ''.join('<a href="%s"%s>%s</a>' % (z, ' class="aktiv"' if z == ziel else '', n) for _, z, n, _ in nav_seiten)
+            weiter = '<a class="weiter haus-knopf" href="%s">Continue reading → <span>%s</span></a>' % (nz, nn)
+        nav = ''.join('<a href="%s" class="haus-knopf%s">%s</a>' % (z, ' aktiv' if z == ziel else '', n) for _, z, n, _ in nav_seiten)
         titel = TITEL if ziel == 'index.html' else '%s · %s' % (name, TITEL)
         e = html.escape
         kopf = ('<!doctype html><html lang="en"><head><meta charset="utf-8">'
@@ -174,7 +174,7 @@ def bauen(vorschau=False):
                 '<title>%s</title><meta name="description" content="%s">'
                 '<meta property="og:title" content="%s"><meta property="og:description" content="%s">'
                 '<meta property="og:type" content="website"><meta name="twitter:card" content="summary">'
-                '<style>%s</style><script src="/haus-leiste.js" defer></script></head><body>') % (e(titel), e(BESCHREIBUNG), e(titel), e(BESCHREIBUNG), CSS)
+                '<style>%s</style><link rel="stylesheet" href="/haus-stil.css"><script src="/haus-leiste.js" defer></script></head><body>') % (e(titel), e(BESCHREIBUNG), e(titel), e(BESCHREIBUNG), CSS)
         streifen = ('<div style="background:#9a5b3c;color:#fff;font:600 12px -apple-system,sans-serif;text-align:center;padding:6px;margin:0 -16px">'
                     'LOKALE VORSCHAU, NICHT ONLINE</div>') if vorschau else ''
         heim = ''
